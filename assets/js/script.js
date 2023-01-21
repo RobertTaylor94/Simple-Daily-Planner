@@ -48,27 +48,35 @@ setColor();
 //The event should save to local storage on save button click
 
 function saveEvent(event) {
+    // get the target parent (row)
     var parent = $(event.target).parent()
+    //get the text content from user input
     var text = parent.children().eq(1).val();
+    //get the row index from its dataset
     var index = parent.children().eq(1)[0].dataset.index;
 
+    //save the user input for an hour to the scheduled object
     schedule[index].task = text;
 
+    //stringify and save the object to storage
     var stringified = JSON.stringify(schedule);
     localStorage.setItem("schedule", stringified);
     console.log("saved")
 }
 
+//when clicking the save button on each row run saveEvent function on the row
 rows.on("click", ".saveBtn", saveEvent)
 
 //persist events between page refreshes
 function loadEvents() {
     var savedSchedule = JSON.parse(localStorage.getItem("schedule"));
 
+    //do not overwrite scheduled array if localstorage is empty
     if (savedSchedule === null) {
         return;
     }
 
+    //if localstorage has a schedule array, overwrite the default schedule array and set each row its correct task text
     schedule = savedSchedule;
     console.log(schedule)
     for (i = 0; i < 9; i++) {

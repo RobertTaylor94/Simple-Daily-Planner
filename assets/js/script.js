@@ -19,8 +19,28 @@ var rows = $(".row");
 
 dayTitle.text(currentDay);
 
+console.log(currentDay);
+
 function clearNewDay() {
-    //if the stored date does not match todays date, clear the page
+    //retrieve the stored date from storage
+    var storedDay = localStorage.getItem("storedDay");
+    
+    //if no date is stored then created now item in local storage with the current date
+    if (storedDay == null) { 
+        saveCurrentDay();
+        return;
+    } else {
+        // if a date is in storage check if it matches the current date
+        if (storedDay != currentDay) {
+            //if the stored date doesn't match the current date clear the schedule and save the new date
+            localStorage.removeItem("schedule");
+            saveCurrentDay();
+        }
+    };
+};
+
+function saveCurrentDay() {
+    localStorage.setItem("storedDay", currentDay);
 };
 
 function setColor() {
@@ -43,6 +63,7 @@ function setColor() {
     }
 
 setColor();
+clearNewDay();
 
 //Allow a user to enter an event when they click on a time block
 //The event should save to local storage on save button click
